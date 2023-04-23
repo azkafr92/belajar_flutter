@@ -10,6 +10,7 @@ class FirebaseAuthentication {
       UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password
       );
+      _firebaseAuth.currentUser!.sendEmailVerification();
       return userCredential.user!.uid;
     } on FirebaseAuthException {
       return null;
@@ -33,6 +34,15 @@ class FirebaseAuthentication {
       return true;
     } on FirebaseAuthException {
       return false;
+    }
+  }
+
+  Future<void> resetPassword(String email) async {
+    try {
+      _firebaseAuth.sendPasswordResetEmail(email: email);
+      return;
+    } on FirebaseAuthException {
+      return;
     }
   }
 }
